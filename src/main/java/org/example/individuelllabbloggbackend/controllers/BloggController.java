@@ -3,20 +3,27 @@ package org.example.individuelllabbloggbackend.controllers;
 import org.example.individuelllabbloggbackend.entities.Entry;
 import org.example.individuelllabbloggbackend.services.EntryServiceImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v2")
+@RequestMapping("/api/v2")
 public class BloggController {
 
-    private EntryServiceImpl entryService;
+    private final EntryServiceImpl entryService;
 
     public BloggController(EntryServiceImpl entryService) {
      this.entryService = entryService;
     }
 
+
+    @GetMapping("/test")                                // (Det ska räcka att man är autentiserad)
+    public ResponseEntity<String> testMetod(@AuthenticationPrincipal Jwt jwt) {          //Hämtar alla blogginlägg
+        return ResponseEntity.ok(String.format("Entry with Id: s has been successfully deleted."));                                                 //TODO
+    }
 
     @GetMapping("/posts")                                // (Det ska räcka att man är autentiserad)
     public ResponseEntity<List<Entry>> getAllEntries() {          //Hämtar alla blogginlägg
