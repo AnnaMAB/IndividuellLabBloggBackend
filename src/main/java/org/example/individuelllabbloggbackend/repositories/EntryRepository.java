@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 @Repository
 public interface EntryRepository  extends JpaRepository<Entry, Integer> {
 
+
 }

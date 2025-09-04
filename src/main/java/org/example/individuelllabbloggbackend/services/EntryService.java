@@ -11,6 +11,6 @@ public interface EntryService {
     Entry createEntry(Entry entry);
     Entry updateEntry(Entry entry);
     void deleteEntryById(int id);
-    Integer getEntryCount();
+    Long getEntryCount();
 
 }
