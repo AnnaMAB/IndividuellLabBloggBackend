@@ -22,13 +22,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf-> csrf.disable())
+                .headers(h-> h.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable())) // för att h2.console ska funka
                 .authorizeHttpRequests(auth->
                         auth
-                                .requestMatchers("/api/v2/count").hasRole("ADMIN")
+                               // .requestMatchers("/api/v2/count").hasRole("ADMIN")
                                 .requestMatchers("/api/v2/newpost").hasRole("USER")
                                 .requestMatchers("/api/v2/updatepost").hasRole("USER")
                                 .requestMatchers("/api/v2/deletepost/**").hasAnyRole("USER","ADMIN")
-                                .anyRequest().authenticated()
+                                .requestMatchers("/h2-console/**").permitAll()  // behövs också för att h2.console ska funka
+                                //.anyRequest().authenticated()
+
                 )
                 .oauth2ResourceServer(oauth2->
                         oauth2

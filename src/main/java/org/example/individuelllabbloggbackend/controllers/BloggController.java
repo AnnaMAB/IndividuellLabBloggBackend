@@ -3,6 +3,7 @@ package org.example.individuelllabbloggbackend.controllers;
 import org.example.individuelllabbloggbackend.entities.Entry;
 import org.example.individuelllabbloggbackend.services.EntryServiceImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class BloggController {
         return ResponseEntity.ok(String.format("Entry with Id: %s has been successfully deleted.", id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/count")
     public ResponseEntity<Long> getEntryCount() {
         return ResponseEntity.ok(entryService.getEntryCount());

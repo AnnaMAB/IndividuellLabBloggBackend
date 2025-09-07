@@ -1,6 +1,6 @@
 package org.example.individuelllabbloggbackend.services;
 
-import org.example.individuelllabbloggbackend.converters.JwtAuthConverter;
+import org.example.individuelllabbloggbackend.configs.UserInfo;
 import org.example.individuelllabbloggbackend.entities.Entry;
 import org.example.individuelllabbloggbackend.exceptions.ResourceNotFoundException;
 import org.example.individuelllabbloggbackend.repositories.EntryRepository;
@@ -17,11 +17,12 @@ import java.util.Optional;
 public class EntryServiceImpl implements EntryService {
 
     private final EntryRepository entryRepository;
+    private final UserInfo userInfo;
 
     @Autowired
-    public EntryServiceImpl(EntryRepository entryRepository, JwtAuthConverter jwtAuthConverter) {
+    public EntryServiceImpl(EntryRepository entryRepository, UserInfo userInfo) {
         this.entryRepository = entryRepository;
-
+        this.userInfo = userInfo;
     }
 
     @Override
@@ -41,7 +42,7 @@ public class EntryServiceImpl implements EntryService {
                     String.format("No entry exist with id: %d", id)
             );
         }
-        if(!entry.get().getAuthorId().equals(Utils.getUserId())) {
+        if(!entry.get().getAuthorId().equals(userInfo.getUserId())) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,
                     String.format("You do not have permission to access this page")
@@ -64,8 +65,9 @@ public class EntryServiceImpl implements EntryService {
                     String.format("Blog content needs to be at least three characters long")
             );
         }
-        entry.setAuthorId(Utils.getUserId());
-        entry.setAuthorUsername(Utils.getUsername());
+        entry.setAuthorId(userInfo.getUserId());
+        entry.setAuthorUsername(userInfo.getUsername());
+        entry.setDateCreated(LocalDate.now());
         return entryRepository.save(entry);
     }
 
@@ -79,7 +81,7 @@ public class EntryServiceImpl implements EntryService {
             );
         }
         Entry oldEntry = entry.get();
-        if(!newEntry.getAuthorId().equals(oldEntry.getAuthorId())) {
+        if(!userInfo.getUserId().equals(oldEntry.getAuthorId())) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,
                     String.format("You do not have permission to access this page")
@@ -113,7 +115,7 @@ public class EntryServiceImpl implements EntryService {
                     String.format("No entry exist with id: %d", id)
             );
         }
-        if (!entry.get().getAuthorId().equals(Utils.getUserId())&&!Utils.isAdmin()) {
+        if (!entry.get().getAuthorId().equals(userInfo.getUserId())&&!userInfo.isAdmin()) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,
                     String.format("You do not have permission to access this page")
