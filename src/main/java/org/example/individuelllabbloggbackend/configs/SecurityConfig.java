@@ -1,6 +1,5 @@
 package org.example.individuelllabbloggbackend.configs;
 
-
 import org.example.individuelllabbloggbackend.converters.JwtAuthConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,12 +24,12 @@ public class SecurityConfig {
                 .headers(h-> h.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable())) // för att h2.console ska funka
                 .authorizeHttpRequests(auth->
                         auth
-                               // .requestMatchers("/api/v2/count").hasRole("ADMIN")
+                                .requestMatchers("/api/v2/count").hasRole("ADMIN")
                                 .requestMatchers("/api/v2/newpost").hasRole("USER")
                                 .requestMatchers("/api/v2/updatepost").hasRole("USER")
                                 .requestMatchers("/api/v2/deletepost/**").hasAnyRole("USER","ADMIN")
                                 .requestMatchers("/h2-console/**").permitAll()  // behövs också för att h2.console ska funka
-                                //.anyRequest().authenticated()
+                                .anyRequest().authenticated()
 
                 )
                 .oauth2ResourceServer(oauth2->

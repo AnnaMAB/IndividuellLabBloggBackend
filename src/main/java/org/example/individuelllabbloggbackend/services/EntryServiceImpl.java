@@ -68,6 +68,7 @@ public class EntryServiceImpl implements EntryService {
         entry.setAuthorId(userInfo.getUserId());
         entry.setAuthorUsername(userInfo.getUsername());
         entry.setDateCreated(LocalDate.now());
+        System.out.println("Entry created by user with id: " + entry.getAuthorId());
         return entryRepository.save(entry);
     }
 

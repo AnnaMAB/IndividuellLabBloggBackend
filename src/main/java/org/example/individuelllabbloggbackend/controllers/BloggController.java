@@ -44,7 +44,6 @@ public class BloggController {
         return ResponseEntity.ok(String.format("Entry with Id: %s has been successfully deleted.", id));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/count")
     public ResponseEntity<Long> getEntryCount() {
         return ResponseEntity.ok(entryService.getEntryCount());
