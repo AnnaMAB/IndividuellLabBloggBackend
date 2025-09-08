@@ -42,12 +42,6 @@ public class EntryServiceImpl implements EntryService {
                     String.format("No entry exist with id: %d", id)
             );
         }
-        if(!entry.get().getAuthorId().equals(userInfo.getUserId())) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
-                    String.format("You do not have permission to access this page")
-            );
-        }
         return entry.get();
     }
 
@@ -59,12 +53,13 @@ public class EntryServiceImpl implements EntryService {
                     String.format("Title required")
             );
         }
-        if (entry.getContent() == null|| entry.getContent().length()<4) {
+        if (entry.getContent() == null|| entry.getContent().length()<3) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     String.format("Blog content needs to be at least three characters long")
             );
         }
+        entry.setId(null);
         entry.setAuthorId(userInfo.getUserId());
         entry.setAuthorUsername(userInfo.getUsername());
         entry.setDateCreated(LocalDate.now());
@@ -72,8 +67,8 @@ public class EntryServiceImpl implements EntryService {
         return entryRepository.save(entry);
     }
 
-    @Override                                  // Uppdaterar ett blogginlägg
-    public Entry updateEntry(Entry newEntry) { // (Kräver user och rätt ägare av blogginlägget)
+    @Override
+    public Entry updateEntry(Entry newEntry) {
         Optional<Entry> entry = entryRepository.findById(newEntry.getId());
         if (!entry.isPresent()) {
             throw new ResponseStatusException(
