@@ -4,6 +4,8 @@ import org.example.individuelllabbloggbackend.entities.Entry;
 import org.example.individuelllabbloggbackend.services.EntryServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,6 +45,8 @@ public class BloggController {
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @DeleteMapping("/deletepost/{id}")
     public ResponseEntity<String> deletePost(@PathVariable Integer id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Authorities: " + auth.getAuthorities());
         entryService.deleteEntryById(id);
         return ResponseEntity.ok(String.format("Entry with Id: %s has been successfully deleted.", id));
     }

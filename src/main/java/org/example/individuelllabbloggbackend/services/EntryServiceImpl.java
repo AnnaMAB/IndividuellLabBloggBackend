@@ -6,6 +6,8 @@ import org.example.individuelllabbloggbackend.exceptions.ResourceNotFoundExcepti
 import org.example.individuelllabbloggbackend.repositories.EntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -111,7 +113,9 @@ public class EntryServiceImpl implements EntryService {
                     String.format("No entry exist with id: %d", id)
             );
         }
-        if (!entry.get().getAuthorId().equals(userInfo.getUserId()) && userInfo.isAdmin()) {
+        if (!entry.get().getAuthorId().equals(userInfo.getUserId()) && !userInfo.isAdmin()) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            System.out.println("Authorities: " + auth.getAuthorities());
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,
                     String.format("You do not have permission to access this page")
