@@ -28,22 +28,26 @@ public class BloggController {
         return ResponseEntity.ok(entryService.getEntryById(id));
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/newpost")
     public ResponseEntity<Entry> createEntry(@RequestBody Entry entry) {
         return ResponseEntity.ok(entryService.createEntry(entry));
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/updatepost")
     public ResponseEntity<Entry> updateEntry(@RequestBody Entry entry) {
         return ResponseEntity.ok(entryService.updateEntry(entry));
     }
 
+    @PreAuthorize("hasRole('USER' or 'ADMIN') ")
     @DeleteMapping("/deletepost/{id}")
     public ResponseEntity<String> deletePost(@PathVariable Integer id) {
         entryService.deleteEntryById(id);
         return ResponseEntity.ok(String.format("Entry with Id: %s has been successfully deleted.", id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/count")
     public ResponseEntity<Long> getEntryCount() {
         return ResponseEntity.ok(entryService.getEntryCount());
