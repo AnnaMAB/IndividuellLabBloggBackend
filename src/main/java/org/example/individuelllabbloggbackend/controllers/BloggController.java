@@ -40,7 +40,7 @@ public class BloggController {
         return ResponseEntity.ok(entryService.updateEntry(entry));
     }
 
-    @PreAuthorize("hasRole('USER' or 'ADMIN') ")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @DeleteMapping("/deletepost/{id}")
     public ResponseEntity<String> deletePost(@PathVariable Integer id) {
         entryService.deleteEntryById(id);
