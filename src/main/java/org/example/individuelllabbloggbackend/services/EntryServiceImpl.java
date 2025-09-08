@@ -116,7 +116,7 @@ public class EntryServiceImpl implements EntryService {
                     String.format("No entry exist with id: %d", id)
             );
         }
-        if (!entry.get().getAuthorId().equals(userInfo.getUserId())&&!userInfo.isAdmin()) {
+        if (!entry.get().getAuthorId().equals(userInfo.getUserId()) && !userInfo.isAdmin()) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,
                     String.format("You do not have permission to access this page")
