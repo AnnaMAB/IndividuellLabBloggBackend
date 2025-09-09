@@ -2,6 +2,7 @@ package org.example.individuelllabbloggbackend.controllers;
 
 import org.example.individuelllabbloggbackend.entities.Entry;
 import org.example.individuelllabbloggbackend.services.EntryServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ public class BloggController {
 
     private final EntryServiceImpl entryService;
 
+    @Autowired
     public BloggController(EntryServiceImpl entryService) {
      this.entryService = entryService;
     }
